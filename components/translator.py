@@ -26,9 +26,15 @@ def get_binary_file_downloader_html(bin_file, file_label='File'):
 # Function to handle translations and audio generation
 def translate_and_generate_audio(inputtext, choice, lang_array):
     output = translate(inputtext, lang_array[choice])
+    audio_path = "AudioVideo/lang.mp3"  # Path to save the audio file
     aud_file = gTTS(text=output, lang=lang_array[choice], slow=False)
-    aud_file.save("lang.mp3")
-    return output
+    
+    # Create the AudioVideo directory if it doesn't exist
+    os.makedirs("AudioVideo", exist_ok=True)
+    
+    # Save the audio file in the specified directory
+    aud_file.save(audio_path)
+    return output, audio_path
 
 # Function to display chat history
 def display_chat_history():
@@ -48,7 +54,7 @@ def display_language():
 
     # Layout
     st.title("Language-Translation")
-    inputtext = st.text_area("Hi Please Enter text here to Translate", height=100)
+    inputtext = st.text_area("Hi, please enter text here to translate", height=100)
 
     # Sidebar for selecting language
     choice = st.sidebar.radio('SELECT LANGUAGE', tuple(lang))
@@ -59,25 +65,28 @@ def display_language():
     if st.button("Translate"):
         if len(inputtext) > 0:
             try:
-                output = translate_and_generate_audio(inputtext, choice, lang_array)
+                output, audio_path = translate_and_generate_audio(inputtext, choice, lang_array)
 
                 with c1:
                     st.text_area("TRANSLATED TEXT", output, height=200)
 
-                # If speech support is available, render audio file
-                with c2:
-                    audio_file_read = open('lang.mp3', 'rb')
-                    audio_bytes = audio_file_read.read()
-                    st.audio(audio_bytes, format='audio/mp3')
-                    st.markdown(get_binary_file_downloader_html("lang.mp3", 'Audio File'), unsafe_allow_html=True)
+                # Check if audio file exists before trying to open
+                if os.path.exists(audio_path):
+                    with open(audio_path, 'rb') as audio_file_read:
+                        audio_bytes = audio_file_read.read()
+                        st.audio(audio_bytes, format='audio/mp3')
+                        st.markdown(get_binary_file_downloader_html(audio_path, 'Audio File'), unsafe_allow_html=True)
+                else:
+                    st.error("Audio file could not be created.")
 
                 # Save chat history
                 st.session_state.chat_history.append((inputtext, output))
                 display_chat_history()
             except Exception as e:
-                st.error(e)
+                st.error(f"An error occurred: {e}")
         else:
             st.warning("Please enter text to translate.")
 
+# Run the main function
 if __name__ == "__main__":
     display_language()
