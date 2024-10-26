@@ -34,7 +34,7 @@ def set_background(option):
 
 st.title("Multi-Project Streamlit App")
 
-option = st.selectbox("Choose a project:", ("Text Summarization", "Chatbot", "Transalator"))
+option = st.selectbox("Choose a project:", ("Chatbot", "Text Summarization", "Transalator"))
 
 set_background(option)
 
