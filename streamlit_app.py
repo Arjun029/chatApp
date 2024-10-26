@@ -15,7 +15,7 @@ def set_background(option):
     background_images = {
         "Text Summarization": "images/summary.jpg",
         "Chatbot": "images/chatbot.jpg",
-        "Transalator":"images/1.jpg"
+        "Transalator":"images/translator.jpg"
     }
     
     image_path = background_images.get(option)
