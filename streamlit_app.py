@@ -38,9 +38,9 @@ option = st.selectbox("Choose a project:", ("Text Summarization", "Chatbot", "Tr
 
 set_background(option)
 
-if option == "Text Summarization":
-    display_text_summarizer()
-elif option == "Chatbot":
+if option == "Chatbot":
     display_chatbot()
+elif option == "Text Summarization":
+    display_text_summarizer()
 elif option == "Transalator":
     display_language()
