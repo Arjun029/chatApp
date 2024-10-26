@@ -4,6 +4,5 @@ spacy
 langdetect
 transformers
 torch
-en_core_web_sm
 mtranslate
 gtts
